@@ -1,0 +1,8 @@
+module decomp_2_1 #(parameter WIDTH =11)(input signed [WIDTH-1:0]a,b,
+output signed [WIDTH:0] even, odd);
+
+assign even = a + b;
+
+assign odd = a - b;
+
+endmodule
