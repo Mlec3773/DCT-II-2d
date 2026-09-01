@@ -6,9 +6,8 @@ output new_size,
 output save_read,
 output save_write
 );
-
+reg [5:0] counter;
 initial begin
-    reg [5:0] counter;
     if (counter === 6'bx || counter === 6'bz) begin
         counter = TN; // Assigne TN si counter est indéfini (x ou z)
     end
