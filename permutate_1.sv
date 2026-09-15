@@ -2,10 +2,10 @@ module permutate_1#(WIDTH=20)(input signed [WIDTH-1:0] Y2E[0:1], Y2O[0:1], Y4O[0
 input [1:0]N,
 output signed [(WIDTH-1)*32:0]Y
 );
-
+// I didn't find why but Marqueti's infrastructure keeps only 15 bits, I think the explication is linked to the quantification 
 wire signed [(WIDTH-1)*32:0] Y_32, Y_16, Y_8, Y_4;
 
-assign Y_4  = {Y2E[0],Y2O[0],Y2E[1],Y2O[1],((WIDTH-1)*28)'d0};
+  assign Y_4  = {Y2E[0],Y2O[0],Y2E[1],Y2O[1],((WIDTH-1)*28)'d0}; 
 assign Y_8  = {Y2E[0], Y4O[0], Y2O[0], Y4O[1], Y2E[1], Y4O[2], Y2O[1], Y4O[3], ((WIDTH-1)*24)'d0};
 assign Y_16 = {Y2E[0], Y8O[0], Y4O[0], Y8O[1], Y2O[0], Y8O[2], Y4O[1], Y8O[3], Y2E[1], Y8O[4], Y4O[2], Y8O[5], Y2O[1], Y8O[6], Y4O[3], Y8O[7], ((WIDTH-1)*16)'d0};
 assign Y_32 = {Y2E[0], Y16O[0], Y8O[0], Y16O[1], Y4O[0], Y16O[2], Y8O[1], Y16O[3], Y2O[0], Y16O[4], Y8O[2], Y16O[5], Y4O[1], Y16O[6], Y8O[3], Y16O[7], Y2E[1], Y16O[8], Y8O[4], Y16O[9], Y4O[2], Y16O[10], Y8O[5], Y16O[11], Y2O[1], Y16O[12], Y8O[6], Y16O[13], Y4O[3], Y16O[14], Y8O[7], Y16O[15]};
