@@ -11,7 +11,7 @@ wire signed [15:0] Y2E_shifted[0:1], Y2O_shifted[0:1], Y4O_shifted[0:3], Y8O_shi
 genvar i;
 
 wire signed [WIDTH-1:0]X[0:31];
-generate //						 <---- Temporary
+generate // attribution  of the input
     for (i = 0; i < 32; i = i + 1) begin : unpack_loop
         assign X[i] = X_test[(i*WIDTH) +: WIDTH];
     end
