@@ -3,7 +3,7 @@ module registre #(
 )(
     input  logic clock,
     input  logic reset,
-    input  logic read,
+    input  logic read, //or write for the output
 
     input  logic signed [(32*WIDTH)-1:0] data_in,
     output logic signed [(32*WIDTH)-1:0] data_reg
