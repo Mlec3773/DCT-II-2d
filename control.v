@@ -2,8 +2,6 @@ module control(input start, clk, reset,
 input [1:0] N,
 output reg enable, read, write,
 output wire direction,
-//output reg [5:0] counter,
-//output reg [2:0] current_state,
 output reg [1:0] N1, N2);
 
 //state registers
@@ -24,7 +22,7 @@ decode_size size1(N1, T1);
 decode_size size2(N2, T2);
 decode_size sizeN(N, TN);
 counter timer(T1,T2,TN,dif,time_state,new_size,save_read,save_write);
-assign dif = T2 - T1;
+assign dif = T2 - T1; // dif is used to deal with gap problem due to the difference in size
 
 
 // update N logic
