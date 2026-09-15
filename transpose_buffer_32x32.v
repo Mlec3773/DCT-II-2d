@@ -35,13 +35,14 @@ module transpose_buffer_32x32 (
 	out_31
 );
 
-parameter DATA_WIDTH = 16;
+parameter DATA_WIDTH = 16;	//SIZE VECTOR
 input  signed [(32*DATA_WIDTH)-1:0] in_buffer;
 wire  signed [DATA_WIDTH-1:0] in_0, in_1, in_2, in_3, in_4, in_5, in_6, in_7, in_8, in_9, in_10, in_11, in_12, in_13, in_14, in_15, in_16, in_17, in_18, in_19, in_20, in_21, in_22, in_23, in_24, in_25, in_26, in_27, in_28, in_29, in_30, in_31;
 output signed [DATA_WIDTH-1:0] out_0, out_1, out_2, out_3, out_4, out_5, out_6, out_7, out_8, out_9, out_10, out_11, out_12, out_13, out_14, out_15, out_16, out_17, out_18, out_19, out_20, out_21, out_22, out_23, out_24, out_25, out_26, out_27, out_28, out_29, out_30, out_31;
 logic signed [DATA_WIDTH-1:0] out_of[0:31] [0:31];
 logic signed [DATA_WIDTH-1:0] in [0:31];
-//wire for logic enable
+	//wire for logic of ENABLE (curently not used and not tested )
+	//(Integer value ->bit value) 
 wire N1_00 = (N1 == 2'b00);
 wire N1_01 = (N1 == 2'b01);
 wire N1_10 = (N1 == 2'b10);
@@ -50,6 +51,7 @@ wire N2_00 = (N2 == 2'b00);
 wire N2_01 = (N2 == 2'b01);
 wire N2_10 = (N2 == 2'b10);
 wire N2_11 = (N2 == 2'b11);
+	// beginning of the new enable signal  (follow the diagram)
 wire enable_32 = (N1_11||N2_11);
 wire enable_16_left;
 wire enable_16_right;
@@ -69,20 +71,22 @@ enable_8_left = (direction)
        && (N1_11 || (!N2_00)));
 enable_16_right;
 enable_8_right;
-
+	
+//attributes the 32 input
 genvar k;
-
 generate
     for (k = 0; k < 32; i++) begin : GEN_INPUT
         assign in[k] = in_buffer[(31-k)*DATA_WIDTH +: DATA_WIDTH];
     end
 endgenerate
+//generate the 32X32 cells
+
 genvar i, j;
 generate
 	for (i = 0; i<32 ; i++) begin : ROW
 		for (j = 0; j<32 ; j++ ) begin : COL
 
-			if (i==0 && j ==0) begin : FIRST
+			if (i==0 && j ==0) begin : FIRST //First cell top left
 				transpose_buffer_cell #(DATA_WIDTH) tb_cell (
 					clock,
 					reset,
@@ -94,7 +98,7 @@ generate
 				);
 
 			end
-			else if (i==0) begin : FIRST_ROW
+			else if (i==0) begin : FIRST_ROW //top line
 				transpose_buffer_cell #(DATA_WIDTH) tb_cell (
 					clock,
 					reset,
@@ -105,7 +109,7 @@ generate
 					out_of[0][j]
 				);				
 			end
-			else if (j==0) begin : FIRST_COL
+			else if (j==0) begin : FIRST_COL // left row
 				transpose_buffer_cell #(DATA_WIDTH) tb_cell (
                     clock,
                     reset,
@@ -116,7 +120,7 @@ generate
                     out_of[i][0]
                 );				
 			end
-			else begin
+			else begin //other cell
 				transpose_buffer_cell #(DATA_WIDTH) tb_cell (
                     clock,
                     reset,
@@ -134,6 +138,7 @@ generate
 endgenerate
 
 assign {in_0, in_1, in_2, in_3, in_4, in_5, in_6, in_7, in_8, in_9, in_10, in_11, in_12, in_13, in_14, in_15, in_16, in_17, in_18, in_19, in_20, in_21, in_22, in_23, in_24, in_25, in_26, in_27, in_28, in_29, in_30, in_31} = in_buffer;
+// help to debug
 // always @(posedge clock)begin
 //     $display("direction=%0d", direction);
 // 	$display("out_of_31 : \ 0=%0d 1=%0d 2=%0d 3=%0d 4=%0d 5=%0d 6=%0d 7=%0d \ 8=%0d 9=%0d 10=%0d 11=%0d 12=%0d 13=%0d 14=%0d 15=%0d \ 16=%0d 17=%0d 18=%0d 19=%0d 20=%0d 21=%0d 22=%0d 23=%0d \ 24=%0d 25=%0d 26=%0d 27=%0d 28=%0d 29=%0d 30=%0d 31=%0d",
@@ -157,7 +162,7 @@ assign {in_0, in_1, in_2, in_3, in_4, in_5, in_6, in_7, in_8, in_9, in_10, in_11
 // 	$display("reset=%0d enable=%0d in0=%0d in1=%0d \ ",
 //              reset, enable, in_0, in_1);
 // end
-
+//output attribution, we choose the the right row or bottom line
 
 assign out_0  = (direction) ? out_of[0][31]  : out_of[31][31];
 assign out_1  = (direction) ? out_of[1][31]  : out_of[31][30];
