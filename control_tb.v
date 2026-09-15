@@ -10,11 +10,11 @@ wire true;
 wire [5:0]counter;
 wire [2:0]current_state;
 wire [1:0] N1, N2;
-integer fd;//fichier imput 
-integer status;//valeur lu
+integer fd;//input file 
+integer status;//value read
 wire [1:0] N_read; 
 
-reg [31:0] vectornum; // variáveis para controle
+	reg [31:0] vectornum; // count the number of simulated cycles
 control DUV(.start(start), .clk(clk), .reset(reset), .N(N), .enable(enable), .read(read), .write(write), .direction(direction), .counter(counter), .current_state(current_state), .N1(N1), .N2(N2));
 
 always begin
@@ -38,7 +38,7 @@ always @(negedge clk)begin
 		status=$fscanf(fd, )
 	end
 	if (status!=)begin
-		$display("Erreur de lecture : %0d valeurs lues", status);
+		$display("Read value error : %0d read values", status);
         $finish;
 	end
 	if (vectornum == 64) begin 
